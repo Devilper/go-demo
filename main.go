@@ -1,16 +1,16 @@
 package main
 
-import "go-demo/init"
+import "go-demo/initialize"
 
 func main() {
 	//初始化logger
-	init.InitLogger()
+	initialize.InitLogger()
 	//初始化config
-	init.InitConfig()
+	initialize.InitConfig()
 	//初始化数据库
-	init.InitDb()
-	defer init.Db.Close()
+	initialize.InitDb()
+	defer initialize.Db.Close()
 	//初始化路由
-	r := init.InitRouter()
+	r := initialize.InitRouter()
 	r.Run()
 }

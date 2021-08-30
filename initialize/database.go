@@ -1,9 +1,11 @@
-package init
+package initialize
 
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"go-demo/global"
+	"go-demo/model"
 )
 
 var Db *gorm.DB
@@ -30,4 +32,6 @@ func InitDb() {
 		panic(err)
 	}
 	Db = db
+	Db.SingularTable(true)
+	Db.AutoMigrate(&model.User{})
 }
