@@ -7,5 +7,7 @@ func main() {
 	init.InitLogger()
 	//初始化config
 	init.InitConfig()
-
+	//初始化数据库
+	init.InitDb()
+	defer init.Db.Close()
 }
