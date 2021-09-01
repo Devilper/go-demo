@@ -7,6 +7,8 @@ import (
 
 func InitRouter() *gin.Engine {
 	router := gin.Default()
-	routers.UserRouter(router)
+
+	routers.UserRoute(router)
+
 	return router
 }

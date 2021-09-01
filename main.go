@@ -1,6 +1,9 @@
 package main
 
-import "go-demo/initialize"
+import (
+	"go-demo/global"
+	"go-demo/initialize"
+)
 
 func main() {
 	//初始化logger
@@ -9,7 +12,7 @@ func main() {
 	initialize.InitConfig()
 	//初始化数据库
 	initialize.InitDb()
-	defer initialize.Db.Close()
+	defer global.Db.Close()
 	//初始化路由
 	r := initialize.InitRouter()
 	r.Run()
