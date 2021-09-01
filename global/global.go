@@ -1,7 +1,11 @@
 package global
 
-import "go-demo/config"
+import (
+	"github.com/jinzhu/gorm"
+	"go-demo/config"
+)
 
 var (
 	LocalConfig *config.LocalConfig = &config.LocalConfig{}
+	Db          *gorm.DB
 )

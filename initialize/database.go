@@ -8,8 +8,6 @@ import (
 	"go-demo/model"
 )
 
-var Db *gorm.DB
-
 func InitDb() {
 	driver_name := global.LocalConfig.Db.DriverName
 	host := global.LocalConfig.Db.Host
@@ -31,7 +29,8 @@ func InitDb() {
 	if err != nil {
 		panic(err)
 	}
-	Db = db
-	Db.SingularTable(true)
-	Db.AutoMigrate(&model.User{})
+
+	db.SingularTable(true)
+	db.AutoMigrate(&model.User{})
+	global.Db = db
 }
