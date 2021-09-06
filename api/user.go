@@ -5,9 +5,8 @@ import (
 	"go-demo/global"
 	"go-demo/model"
 	"go-demo/services"
-	"net/http"
-
 	"go.uber.org/zap"
+	"net/http"
 )
 
 func GetUsers(c *gin.Context) {
@@ -65,4 +64,21 @@ func DeleteUser(c *gin.Context) {
 	}
 	result.Success(nil)
 	return
+}
+
+func LoginUser(c *gin.Context) {
+	result := global.NewResult(c)
+	json := make(map[string]interface{})
+	if err := c.BindJSON(&json); err != nil {
+		result.Error(http.StatusBadRequest, "参数错误")
+		return
+	}
+	token, err := services.UserLogin(json)
+	if err != nil {
+		result.Error(http.StatusBadRequest, "登入失败")
+		return
+	}
+	result.Success(token)
+	return
+
 }

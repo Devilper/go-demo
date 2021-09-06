@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"go-demo/global"
@@ -33,4 +34,20 @@ func InitDb() {
 	db.SingularTable(true)
 	db.AutoMigrate(&model.User{})
 	global.Db = db
+}
+
+func InitRedis() error {
+	address := global.LocalConfig.Redis.Address
+	password := global.LocalConfig.Redis.Password
+	db := global.LocalConfig.Redis.Db
+	global.Redis = redis.NewClient(&redis.Options{
+		Addr:     address,
+		Password: password,
+		DB:       db,
+	})
+	_, err := global.Redis.Ping().Result()
+	if err != nil {
+		return err
+	}
+	return nil
 }
