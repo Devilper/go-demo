@@ -73,12 +73,16 @@ func LoginUser(c *gin.Context) {
 		result.Error(http.StatusBadRequest, "参数错误")
 		return
 	}
-	token, err := services.UserLogin(json)
+	user, err := services.UserLogin(json)
 	if err != nil {
 		result.Error(http.StatusBadRequest, "登入失败")
 		return
 	}
-	result.Success(token)
+	data, err := services.GenerateToken(user)
+	if err != nil {
+		result.Error(http.StatusBadRequest, err.Error())
+		return
+	}
+	result.Success(data)
 	return
-
 }

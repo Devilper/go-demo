@@ -6,7 +6,6 @@ import (
 	"go-demo/global"
 	"go-demo/model"
 	"go.uber.org/zap"
-	"strconv"
 )
 
 type UserService interface {
@@ -73,27 +72,20 @@ func DeleteUser(id string) error {
 	return nil
 }
 
-func UserLogin(json map[string]interface{}) (string, error) {
+func UserLogin(json map[string]interface{}) (model.User, error) {
 	var Users []model.User
+	var user model.User
 	UserName := json["user_name"]
 	if err := global.Db.Where("user_name=?", UserName).First(&Users).Error; err != nil {
-		return "", err
+		return user, err
 	}
 	fmt.Println(len(Users))
 	if len(Users) == 1 {
-		User := Users[0]
-		if User.Password == json["password"] {
-			ID := User.ID
-			id := strconv.Itoa(int(ID))
-			// 生成token
-			token, err := GetToken(id)
-			if err != nil {
-				return "", err
-			} else {
-				return token, nil
-			}
+		user = Users[0]
+		if user.Password == json["password"] {
+			return user, nil
 		}
 	}
-	return "", errors.New("密码错误")
+	return user, errors.New("密码错误")
 
 }
