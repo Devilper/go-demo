@@ -51,3 +51,6 @@ func InitLogger() {
 
 	zap.ReplaceGlobals(logger)
 }
+func init() {
+	InitLogger()
+}

@@ -11,6 +11,7 @@ import (
 func InitRouter() *gin.Engine {
 	router := gin.Default()
 	router.POST("/login/", api.LoginUser)
+	router.POST("/user/", api.SaveUser)
 	router.Use(jwt.Auth())
 	routers.UserRoute(router)
 

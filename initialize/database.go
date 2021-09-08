@@ -51,3 +51,11 @@ func InitRedis() error {
 	}
 	return nil
 }
+
+func init() {
+	InitDb()
+	if err := InitRedis(); err != nil {
+		panic(err)
+	}
+	//defer global.Db.Close()
+}

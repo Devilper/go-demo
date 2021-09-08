@@ -2,10 +2,13 @@ package services
 
 import (
 	"errors"
-	"fmt"
+	"go-demo/common"
+	"go-demo/forms"
 	"go-demo/global"
 	"go-demo/model"
 	"go.uber.org/zap"
+
+	uresponse "go-demo/global/response"
 )
 
 type UserService interface {
@@ -39,16 +42,17 @@ func SaveUser(user *model.User) error {
 	return nil
 }
 
-func GetUser(id string) map[string]interface{} {
+func GetUser(id string) uresponse.UserResult {
 	var user model.User
-	UserInfo := make(map[string]interface{})
+	var UserInfo = uresponse.UserResult{}
 	if err := global.Db.Where("ID=?", id).First(&user).Error; err != nil {
 		return UserInfo
 	}
-	UserInfo["id"] = user.ID
-	UserInfo["user_name"] = user.UserName
-	UserInfo["phone_num"] = user.PhoneNum
-
+	UserInfo = uresponse.UserResult{
+		ID:       user.ID,
+		UserName: user.UserName,
+		PhoneNum: user.PhoneNum,
+	}
 	return UserInfo
 }
 
@@ -72,17 +76,17 @@ func DeleteUser(id string) error {
 	return nil
 }
 
-func UserLogin(json map[string]interface{}) (model.User, error) {
+func UserLogin(json *forms.UserLoginRequest) (model.User, error) {
 	var Users []model.User
 	var user model.User
-	UserName := json["user_name"]
-	if err := global.Db.Where("user_name=?", UserName).First(&Users).Error; err != nil {
+	UserName := json.UserName
+	if err := global.Db.Where("user_name=?", UserName).Take(&Users).Error; err != nil {
 		return user, err
 	}
-	fmt.Println(len(Users))
 	if len(Users) == 1 {
 		user = Users[0]
-		if user.Password == json["password"] {
+		isTrue := common.DecryptPassword(user.Password, json.Password)
+		if isTrue {
 			return user, nil
 		}
 	}

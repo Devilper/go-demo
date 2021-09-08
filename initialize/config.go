@@ -27,3 +27,7 @@ func InitConfig() {
 	zap.S().Info("配置信息: &v", global.LocalConfig)
 
 }
+
+func init() {
+	InitConfig()
+}

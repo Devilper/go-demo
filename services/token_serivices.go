@@ -2,26 +2,24 @@ package services
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	myjwt "go-demo/middleware/jwt"
 	"go-demo/model"
 	"go.uber.org/zap"
 	"strconv"
 	"time"
+
+	uresponse "go-demo/global/response"
+	myjwt "go-demo/middleware/jwt"
 )
 
-type LoginResult struct {
-	Token string `json:"token"`
-	model.User
-}
 type TokenService interface {
 	GenerateToken(user model.User) error
 }
 
-func GenerateToken(user model.User) (LoginResult, error) {
+func GenerateToken(user model.User) (uresponse.LoginResult, error) {
 	j := &myjwt.JWT{
 		SigningKey: []byte("devil"),
 	}
-	data := LoginResult{
+	data := uresponse.LoginResult{
 		User:  user,
 		Token: "",
 	}
